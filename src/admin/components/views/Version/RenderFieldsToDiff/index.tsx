@@ -1,5 +1,4 @@
 import React from 'react';
-import { DiffMethod } from 'react-diff-viewer';
 import { Props } from './types';
 import { fieldAffectsData, fieldHasSubFields } from '../../../../../fields/config/types';
 import Nested from './fields/Nested';
@@ -22,7 +21,6 @@ const RenderFieldsToDiff: React.FC<Props> = ({
       const Component = fieldComponents[field.type];
 
       const isRichText = field.type === 'richText';
-      const diffMethod: DiffMethod = diffMethods[field.type] || 'CHARS';
 
       if (Component) {
         if (fieldAffectsData(field)) {
@@ -50,7 +48,6 @@ const RenderFieldsToDiff: React.FC<Props> = ({
                     >
                       <div className={`${baseClass}__locale-value`}>
                         <Component
-                          diffMethod={diffMethod}
                           locale={locale}
                           locales={locales}
                           field={field}
@@ -74,7 +71,6 @@ const RenderFieldsToDiff: React.FC<Props> = ({
               key={i}
             >
               <Component
-                diffMethod={diffMethod}
                 locales={locales}
                 field={field}
                 fieldComponents={fieldComponents}

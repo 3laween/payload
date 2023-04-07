@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../../../../../utilities/Config';
 import { useLocale } from '../../../../../utilities/Locale';
@@ -88,14 +87,6 @@ const Relationship: React.FC<Props & { field: RelationshipField }> = ({ field, v
         )}
         {getTranslation(field.label, i18n)}
       </Label>
-      <ReactDiffViewer
-        styles={diffStyles}
-        oldValue={typeof comparisonToRender !== 'undefined' ? String(comparisonToRender) : placeholder}
-        newValue={typeof versionToRender !== 'undefined' ? String(versionToRender) : placeholder}
-        splitView
-        hideLineNumbers
-        showDiffOnly={false}
-      />
     </div>
   );
 

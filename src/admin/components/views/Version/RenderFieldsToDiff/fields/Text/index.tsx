@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import { useTranslation } from 'react-i18next';
 import Label from '../../Label';
 import { diffStyles } from '../styles';
@@ -10,7 +9,7 @@ import './index.scss';
 
 const baseClass = 'text-diff';
 
-const Text: React.FC<Props> = ({ field, locale, version, comparison, isRichText = false, diffMethod }) => {
+const Text: React.FC<Props> = ({ field, locale, version, comparison, isRichText = false }) => {
   let placeholder = '';
   const { t, i18n } = useTranslation('general');
 
@@ -32,15 +31,6 @@ const Text: React.FC<Props> = ({ field, locale, version, comparison, isRichText 
         )}
         {getTranslation(field.label, i18n)}
       </Label>
-      <ReactDiffViewer
-        styles={diffStyles}
-        compareMethod={DiffMethod[diffMethod]}
-        oldValue={typeof comparisonToRender !== 'undefined' ? String(comparisonToRender) : placeholder}
-        newValue={typeof versionToRender !== 'undefined' ? String(versionToRender) : placeholder}
-        splitView
-        hideLineNumbers
-        showDiffOnly={false}
-      />
     </div>
   );
 };

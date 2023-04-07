@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import { useTranslation } from 'react-i18next';
 import type { i18n as Ii18n } from 'i18next';
 import Label from '../../Label';
@@ -26,7 +25,7 @@ const getTranslatedOptions = (options: string | OptionObject | (OptionObject | s
   return typeof options === 'string' ? options : getTranslation(options.label, i18n);
 };
 
-const Select: React.FC<Props> = ({ field, locale, version, comparison, diffMethod }) => {
+const Select: React.FC<Props> = ({ field, locale, version, comparison }) => {
   let placeholder = '';
   const { t, i18n } = useTranslation('general');
 
@@ -43,15 +42,6 @@ const Select: React.FC<Props> = ({ field, locale, version, comparison, diffMetho
         )}
         {getTranslation(field.label, i18n)}
       </Label>
-      <ReactDiffViewer
-        styles={diffStyles}
-        compareMethod={DiffMethod[diffMethod]}
-        oldValue={comparisonToRender}
-        newValue={typeof versionToRender !== 'undefined' ? versionToRender : placeholder}
-        splitView
-        hideLineNumbers
-        showDiffOnly={false}
-      />
     </div>
   );
 };
