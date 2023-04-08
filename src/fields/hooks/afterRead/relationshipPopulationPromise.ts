@@ -1,6 +1,6 @@
 import { PayloadRequest } from '../../../express/types';
 import { RelationshipField, fieldSupportsMany, fieldHasMaxDepth, UploadField } from '../../config/types';
-
+import { deepPick } from '../../deepPick';
 type PopulateArgs = {
   depth: number
   currentDepth: number
@@ -55,8 +55,20 @@ const populate = async ({
     if (!relationshipValue) {
       // ids are visible regardless of access controls
       relationshipValue = id;
+    }else if(field.select && req.payloadAPI !== 'graphQL'){
+      const fieldsOrTrue = Array.isArray(field.select)
+        ? field.select
+        : field.select({
+          data: relationshipValue,
+          collection: relatedCollection.config,
+          siblingData: dataToUpdate,
+          req,
+        });
+      if (fieldsOrTrue !== true) {
+        // if fieldsOrTrue is true then we want to return the entire related document
+        relationshipValue = deepPick(relationshipValue, ['id', ...fieldsOrTrue]);
+      }
     }
-
     if (typeof index === 'number' && typeof key === 'string') {
       if (Array.isArray(field.relationTo)) {
         dataToUpdate[field.name][key][index].value = relationshipValue;
