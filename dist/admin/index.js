@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // @ts-ignore - need to do this because this file doesn't actually exist
 const react_1 = __importDefault(require("react"));
 const react_dom_1 = require("react-dom");
-require("./index.css");
 const Root_1 = __importDefault(require("./Root"));
 const root = document.getElementById("app");
 (0, react_dom_1.render)(react_1.default.createElement(Root_1.default, null), root);
