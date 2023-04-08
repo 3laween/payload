@@ -4,12 +4,13 @@ import { Editor } from 'slate';
 import type { TFunction } from 'i18next';
 import type { EditorProps } from '@monaco-editor/react';
 import { Operation, Where } from '../../types';
-import { TypeWithID } from '../../collections/config/types';
+import { TypeWithID, SanitizedCollectionConfig } from '../../collections/config/types';
 import { PayloadRequest } from '../../express/types';
 import { ConditionalDateProps } from '../../admin/components/elements/DatePicker/types';
 import { Description } from '../../admin/components/forms/FieldDescription/types';
 import { User } from '../../auth';
 import { Payload } from '../../payload';
+import { DeepPickKeys } from '../deepPick';
 import { RowLabel } from '../../admin/components/forms/RowLabel/types';
 
 export type FieldHookArgs<T extends TypeWithID = any, P = any, S = any> = {
@@ -243,16 +244,33 @@ export type UIField = {
   type: 'ui';
 }
 
+type SelectOptionsProps<T extends TypeWithID, P = any> = {
+  data: T,
+  collection: SanitizedCollectionConfig
+  siblingData: Partial<P>
+  req: PayloadRequest
+}
+
+export type SelectFunction<T extends TypeWithID = any, P = any> = (
+  options: SelectOptionsProps<T, P>
+) => Array<DeepPickKeys<T>> | true;
+
+export type SelectOptions<T extends TypeWithID = any, P = any> =
+  | Array<DeepPickKeys<T>>
+  | SelectFunction<T, P>;
+
 export type UploadField = FieldBase & {
   type: 'upload'
   relationTo: string
   maxDepth?: number
   filterOptions?: FilterOptions;
+  select?: SelectOptions;
 }
 
 type CodeAdmin = Admin & {
   language?: string;
   editorOptions?: EditorProps['options'];
+  select?: SelectOptions;
 }
 
 export type CodeField = Omit<FieldBase, 'admin'> & {
@@ -336,6 +354,7 @@ export type RichTextLeaf = 'bold' | 'italic' | 'underline' | 'strikethrough' | '
 
 export type RichTextField = FieldBase & {
   type: 'richText';
+  select?: SelectFunction;
   admin?: Admin & {
     placeholder?: Record<string, string> | string
     elements?: RichTextElement[];
