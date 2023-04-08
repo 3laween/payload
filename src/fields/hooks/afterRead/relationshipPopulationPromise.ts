@@ -29,7 +29,6 @@ const populate = async ({
   const dataToUpdate = dataReference;
   const relation = Array.isArray(field.relationTo) ? (data.relationTo as string) : field.relationTo;
   const relatedCollection = req.payload.collections[relation];
-
   if (relatedCollection) {
     let id = Array.isArray(field.relationTo) ? data.value : data;
     let relationshipValue;

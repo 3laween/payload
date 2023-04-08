@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const types_1 = require("../../config/types");
+const deepPick_1 = require("../../deepPick");
 const populate = async ({ depth, currentDepth, req, overrideAccess, dataReference, data, field, index, key, showHiddenFields, }) => {
     const dataToUpdate = dataReference;
     const relation = Array.isArray(field.relationTo) ? data.relationTo : field.relationTo;
@@ -27,6 +28,20 @@ const populate = async ({ depth, currentDepth, req, overrideAccess, dataReferenc
         if (!relationshipValue) {
             // ids are visible regardless of access controls
             relationshipValue = id;
+        }
+        else if (field.select && req.payloadAPI !== 'graphQL') {
+            const fieldsOrTrue = Array.isArray(field.select)
+                ? field.select
+                : field.select({
+                    data: relationshipValue,
+                    collection: relatedCollection.config,
+                    siblingData: dataToUpdate,
+                    req,
+                });
+            if (fieldsOrTrue !== true) {
+                // if fieldsOrTrue is true then we want to return the entire related document
+                relationshipValue = (0, deepPick_1.deepPick)(relationshipValue, ['id', ...fieldsOrTrue]);
+            }
         }
         if (typeof index === 'number' && typeof key === 'string') {
             if (Array.isArray(field.relationTo)) {

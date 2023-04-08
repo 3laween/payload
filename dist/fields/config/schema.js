@@ -196,6 +196,7 @@ exports.upload = exports.baseField.keys({
     relationTo: joi_1.default.string().required(),
     name: joi_1.default.string().required(),
     maxDepth: joi_1.default.number(),
+    select: joi_1.default.alternatives().try(joi_1.default.array().items(joi_1.default.string()), joi_1.default.func()),
     filterOptions: joi_1.default.alternatives().try(joi_1.default.object(), joi_1.default.func()),
 });
 exports.checkbox = exports.baseField.keys({
@@ -215,6 +216,7 @@ exports.relationship = exports.baseField.keys({
     name: joi_1.default.string().required(),
     maxDepth: joi_1.default.number(),
     filterOptions: joi_1.default.alternatives().try(joi_1.default.object(), joi_1.default.func()),
+    select: joi_1.default.alternatives().try(joi_1.default.array().items(joi_1.default.string()), joi_1.default.func()),
     defaultValue: joi_1.default.alternatives().try(joi_1.default.func()),
     admin: exports.baseAdminFields.keys({
         isSortable: joi_1.default.boolean().default(false),
@@ -252,6 +254,7 @@ exports.blocks = exports.baseField.keys({
 exports.richText = exports.baseField.keys({
     type: joi_1.default.string().valid('richText').required(),
     name: joi_1.default.string().required(),
+    select: joi_1.default.func(),
     defaultValue: joi_1.default.alternatives().try(joi_1.default.array().items(joi_1.default.object()), joi_1.default.func()),
     admin: exports.baseAdminFields.keys({
         placeholder: joi_1.default.string(),

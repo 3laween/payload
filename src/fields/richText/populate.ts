@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {Collection} from '../../collections/config/types';
-import {Field} from '../config/types';
+import {Field, RichTextField} from '../config/types';
 import {PayloadRequest} from '../../express/types';
 import {deepPick} from '../deepPick';
 
@@ -10,11 +10,11 @@ type Arguments = {
   key: string | number
   depth: number
   currentDepth?: number
-  field,
+  field: RichTextField
   req: PayloadRequest
   showHiddenFields: boolean
+}
 
-};
 
 export const populate = async ({
                                  id,
@@ -26,27 +26,27 @@ export const populate = async ({
                                  currentDepth,
                                  req,
                                  showHiddenFields,
+                                 field,
                                }: Omit<Arguments, 'field'> & {
   id: string,
   field: Field
   collection: Collection
 }): Promise<void> => {
   const dataRef = data as Record<string, unknown>;
-
-  const doc = await req.payloadDataLoader.load(JSON.stringify([
-    collection.config.slug,
+  const doc = await req.payload.findByID({
+    req,
+    collection: collection.config.slug,
     id,
+    currentDepth: currentDepth + 1,
+    overrideAccess: typeof overrideAccess === 'undefined' ? false : overrideAccess,
+    disableErrors: true,
     depth,
-    currentDepth + 1,
-    req.locale,
-    req.fallbackLocale,
-    typeof overrideAccess === 'undefined' ? false : overrideAccess,
     showHiddenFields,
-  ]));
+  });
 
   if (doc) {
     if (field.type === 'richText' && field.select && req.payloadAPI !== 'graphQL') {
-      const fieldsOrTrue = field.select({
+      const fieldsOrTrue: any = field.select({
         data: doc,
         collection: collection.config,
         siblingData: dataRef,

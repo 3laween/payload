@@ -54,7 +54,7 @@ declare const _default: {
             disableBulkEdit?: boolean;
             hidden?: boolean;
         } & {
-            editorOptions?: import("monaco-editor").editor.IStandaloneEditorConstructionOptions;
+            editorOptions?: monaco.editor.IStandaloneEditorConstructionOptions;
         };
         type: "json";
     } & {

@@ -4,14 +4,14 @@ import { Editor } from 'slate';
 import type { TFunction } from 'i18next';
 import type { EditorProps } from '@monaco-editor/react';
 import { Operation, Where } from '../../types';
-import { TypeWithID, SanitizedCollectionConfig } from '../../collections/config/types';
+import { SanitizedCollectionConfig, TypeWithID } from '../../collections/config/types';
 import { PayloadRequest } from '../../express/types';
 import { ConditionalDateProps } from '../../admin/components/elements/DatePicker/types';
 import { Description } from '../../admin/components/forms/FieldDescription/types';
 import { User } from '../../auth';
 import { Payload } from '../../payload';
-import { DeepPickKeys } from '../deepPick';
 import { RowLabel } from '../../admin/components/forms/RowLabel/types';
+import { DeepPickKeys } from '../deepPick';
 
 export type FieldHookArgs<T extends TypeWithID = any, P = any, S = any> = {
   /** The data passed to update the document within create and update operations, and the full document itself in the afterRead hook. */
@@ -244,6 +244,7 @@ export type UIField = {
   type: 'ui';
 }
 
+
 type SelectOptionsProps<T extends TypeWithID, P = any> = {
   data: T,
   collection: SanitizedCollectionConfig
@@ -270,7 +271,6 @@ export type UploadField = FieldBase & {
 type CodeAdmin = Admin & {
   language?: string;
   editorOptions?: EditorProps['options'];
-  select?: SelectOptions;
 }
 
 export type CodeField = Omit<FieldBase, 'admin'> & {
@@ -301,6 +301,7 @@ export type SelectField = FieldBase & {
 
 export type RelationshipField = FieldBase & {
   type: 'relationship';
+  select?: SelectOptions;
   relationTo: string | string[];
   hasMany?: boolean;
   maxDepth?: number;

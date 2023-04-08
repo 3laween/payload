@@ -3,13 +3,14 @@ import { Editor } from 'slate';
 import type { TFunction } from 'i18next';
 import type { EditorProps } from '@monaco-editor/react';
 import { Operation, Where } from '../../types';
-import { TypeWithID } from '../../collections/config/types';
+import { SanitizedCollectionConfig, TypeWithID } from '../../collections/config/types';
 import { PayloadRequest } from '../../express/types';
 import { ConditionalDateProps } from '../../admin/components/elements/DatePicker/types';
 import { Description } from '../../admin/components/forms/FieldDescription/types';
 import { User } from '../../auth';
 import { Payload } from '../../payload';
 import { RowLabel } from '../../admin/components/forms/RowLabel/types';
+import { DeepPickKeys } from '../deepPick';
 export type FieldHookArgs<T extends TypeWithID = any, P = any, S = any> = {
     /** The data passed to update the document within create and update operations, and the full document itself in the afterRead hook. */
     data?: Partial<T>;
@@ -210,11 +211,20 @@ export type UIField = {
     };
     type: 'ui';
 };
+type SelectOptionsProps<T extends TypeWithID, P = any> = {
+    data: T;
+    collection: SanitizedCollectionConfig;
+    siblingData: Partial<P>;
+    req: PayloadRequest;
+};
+export type SelectFunction<T extends TypeWithID = any, P = any> = (options: SelectOptionsProps<T, P>) => Array<DeepPickKeys<T>> | true;
+export type SelectOptions<T extends TypeWithID = any, P = any> = Array<DeepPickKeys<T>> | SelectFunction<T, P>;
 export type UploadField = FieldBase & {
     type: 'upload';
     relationTo: string;
     maxDepth?: number;
     filterOptions?: FilterOptions;
+    select?: SelectOptions;
 };
 type CodeAdmin = Admin & {
     language?: string;
@@ -244,6 +254,7 @@ export type SelectField = FieldBase & {
 };
 export type RelationshipField = FieldBase & {
     type: 'relationship';
+    select?: SelectOptions;
     relationTo: string | string[];
     hasMany?: boolean;
     maxDepth?: number;
@@ -284,6 +295,7 @@ export type RichTextElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockqu
 export type RichTextLeaf = 'bold' | 'italic' | 'underline' | 'strikethrough' | 'code' | RichTextCustomLeaf;
 export type RichTextField = FieldBase & {
     type: 'richText';
+    select?: SelectFunction;
     admin?: Admin & {
         placeholder?: Record<string, string> | string;
         elements?: RichTextElement[];
