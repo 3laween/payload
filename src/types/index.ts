@@ -1,7 +1,7 @@
 import { Document as MongooseDocument } from 'mongoose';
 import { TypeWithTimestamps } from '../collections/config/types';
 import { FileData } from '../uploads/types';
-
+export { DeepPick, DeepPickKeys } from '../fields/deepPick';
 export { PayloadRequest } from '../express/types';
 
 export type Operator =
