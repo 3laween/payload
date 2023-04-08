@@ -282,6 +282,10 @@ export const upload = baseField.keys({
   relationTo: joi.string().required(),
   name: joi.string().required(),
   maxDepth: joi.number(),
+  select: joi.alternatives().try(
+    joi.array().items(joi.string()),
+    joi.func(),
+  ),
   filterOptions: joi.alternatives().try(
     joi.object(),
     joi.func(),
@@ -317,6 +321,10 @@ export const relationship = baseField.keys({
   maxDepth: joi.number(),
   filterOptions: joi.alternatives().try(
     joi.object(),
+    joi.func(),
+  ),
+  select: joi.alternatives().try(
+    joi.array().items(joi.string()),
     joi.func(),
   ),
   defaultValue: joi.alternatives().try(
@@ -377,6 +385,7 @@ export const blocks = baseField.keys({
 export const richText = baseField.keys({
   type: joi.string().valid('richText').required(),
   name: joi.string().required(),
+  select: joi.func(),
   defaultValue: joi.alternatives().try(
     joi.array().items(joi.object()),
     joi.func(),
